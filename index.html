@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Counter Page</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,800;1,800&display=swap');
+
+    body {
+      background-color: #00ff00;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      font-family: "Roboto", sans-serif;
+    }
+
+    .roboto-custom {
+      font-family: "Roboto", sans-serif;
+      font-optical-sizing: auto;
+      font-weight: 800;
+      font-style: normal;
+      font-variation-settings: "wdth" 100;
+    }
+
+    #form-section, #counter, #buttons {
+      display: none;
+    }
+
+    #form-section {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    input, select, button {
+      padding: 10px;
+      font-size: 1rem;
+    }
+
+    #counter {
+      font-size: 50px;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="form-section">
+    <input type="number" id="target-number" placeholder="Enter a number" />
+    <select id="unit">
+      <option value="%">%</option>
+      <option value="kg">kg</option>
+      <option value="m">m</option>
+      <option value="pts">pts</option>
+    </select>
+    <select id="speed">
+      <option value="20">Fast</option>
+      <option value="50">Medium</option>
+      <option value="100">Slow</option>
+    </select>
+    <input type="number" id="font-size" placeholder="Font size in px" value="50" />
+    <button onclick="startCounter()">Submit</button>
+  </div>
+
+  <div id="counter" class="roboto-custom"></div>
+
+  <div id="buttons">
+    <button onclick="resetPage()">Replay</button>
+  </div>
+
+  <script>
+    document.getElementById("form-section").style.display = "flex";
+
+    function startCounter() {
+      const number = parseFloat(document.getElementById("target-number").value);
+      const unit = document.getElementById("unit").value;
+      const speed = parseInt(document.getElementById("speed").value);
+      const fontSize = parseInt(document.getElementById("font-size").value);
+
+      if (isNaN(number) || isNaN(speed) || isNaN(fontSize)) {
+        alert("Please enter valid values.");
+        return;
+      }
+
+      document.getElementById("form-section").style.display = "none";
+
+      setTimeout(() => {
+        const counterEl = document.getElementById("counter");
+        counterEl.style.fontSize = fontSize + "px";
+        counterEl.style.display = "block";
+        let count = 0;
+
+        const interval = setInterval(() => {
+          counterEl.textContent = count + unit;
+          if (count >= number) {
+            clearInterval(interval);
+            setTimeout(() => {
+              document.getElementById("buttons").style.display = "flex";
+            }, 5000);
+          }
+          count++;
+        }, speed);
+      }, 5000);
+    }
+
+    function resetPage() {
+      location.reload();
+    }
+
+  </script>
+</body>
+</html>
